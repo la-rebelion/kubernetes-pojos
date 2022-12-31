@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Kubernetes POJOs</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="kubernetes-pojos">Kubernetes POJOs</h1>
+<p>Auto-Generated Plain Old Java Objects (POJO) from Kubernetes API Swagger specs (official) with <a href="https://www.jsonschema2pojo.org">jsonschema2pojo</a>.</p>
+<pre><code class="language-sh"><span class="hljs-built_in">cat</span> k8s-api-swagger.json | yq -P &gt; k8s-api-swagger.yaml
+io.k8s((\.)([a-zA-Z|1]+))+ &gt; io_k8s_<span class="hljs-variable">$3</span>
+<span class="hljs-comment"># grep all types</span>
+grep -E <span class="hljs-string">&quot;io.k8s((\.)([a-z|1-2|\-]+))+((\.)([a-zA-Z]+):)&quot;</span> k8s-api-swagger-definitions-only.yaml | <span class="hljs-built_in">wc</span> -l
+508
+<span class="hljs-comment"># definitions and usages</span>
+grep -E <span class="hljs-string">&quot;io.k8s((\.)([a-z|1-2|\-]+))+((\.)([a-zA-Z]+))&quot;</span> k8s-api-swagger-definitions-only.yaml | <span class="hljs-built_in">wc</span> -l
+1377
+<span class="hljs-comment"># canonical names</span>
+grep -E <span class="hljs-string">&quot;io.k8s((\.)([a-z|1-2|\-]+))+((\.)([a-zA-Z]+):)&quot;</span> k8s-api-swagger-definitions-only.yaml | grep -E <span class="hljs-string">&quot;io.k8s((\.)([a-z|1-2|\-]+))+&quot;</span>
+<span class="hljs-comment"># just the packages</span>
+grep -E <span class="hljs-string">&quot;io.k8s((\.)([a-z|1-2|\-]+))+((\.)([a-zA-Z]+):)&quot;</span> ../k8s-api-swagger-definitions-only.yaml | grep -Eo <span class="hljs-string">&quot;io.k8s((\.)([a-z|1-2|\-]+))+&quot;</span> | <span class="hljs-built_in">sort</span> --unique &gt; packages.txt
+<span class="hljs-built_in">mkdir</span> -p `<span class="hljs-built_in">cat</span> ../packages.txt`
+
+<span class="hljs-comment"># VS Code - just the class name</span>
+io.k8s((?&lt;dot&gt;\.)(\w+))+ --&gt; <span class="hljs-variable">$3</span>
+</code></pre>
+<p>For JSON Schema to POJO, <a href="https://github.com/joelittlejohn/jsonschema2pojo/issues/990">two files are needed</a>; the definitions (from Swagger: k8s-api-swagger-definitions-only.json) and the referenced schema (what I need/want) to &quot;force&quot; the generation of code (k8s-api-schema.json).</p>
+<pre><code class="language-sh">jsonschema2pojo --<span class="hljs-built_in">source</span> k8s-api-schema.json --target java-gen -a JACKSON2 -R --package la.rebelion.k8s.api --include-dynamic-accessors --generate-constructors --constructors-include-copy-constructor
+</code></pre>
+<h2 id="license">License</h2>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Kubernetes POJOs</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://rebelion.la" property="cc:attributionName" rel="cc:attributionURL">La Rebelion Labs </a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/la-rebelion/kubernetes-pojos" rel="dct:source">https://github.com/la-rebelion/kubernetes-pojos</a>.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://github.com/kubernetes-sigs/reference-docs/tree/master/gen-apidocs/config/v1_25">API reference (v1.25)</a></li>
+<li><a href="https://github.com/kubernetes/kubernetes/tree/release-1.25/api/openapi-spec">Kubernetes's OpenAPI Specification</a></li>
+</ul>
+
+        <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+        
+    </body>
+    </html>

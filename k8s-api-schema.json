@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Kubernetes Schema 1.25",
+    "description": "The schema for K1s - Ref: https://github.com/kubernetes-sigs/reference-docs/tree/master/gen-apidocs/config/v1_25",
+    "type": "object",
+    "properties": {
+        "NamespaceList": {
+            "$ref": "k8s-api-swagger-definitions-only.json#/definitions/NamespaceList"
+        },
+        "Info": {
+            "$ref": "k8s-api-swagger-definitions-only.json#/definitions/Info"
+        }
+    }
+}

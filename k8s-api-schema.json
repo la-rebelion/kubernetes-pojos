@@ -9,6 +9,18 @@
         },
         "Info": {
             "$ref": "k8s-api-swagger-definitions-only.json#/definitions/Info"
+        },
+        "PodList": {
+            "$ref": "k8s-api-swagger-definitions-only.json#/definitions/PodList"
+        },
+        "DeleteOptions": {
+            "$ref": "k8s-api-swagger-definitions-only.json#/definitions/DeleteOptions"
+        },
+        "Patch": {
+            "$ref": "k8s-api-swagger-definitions-only.json#/definitions/Patch"
+        },
+        "JobList": {
+            "$ref": "k8s-api-swagger-definitions-only.json#/definitions/JobList"
         }
     }
 }
